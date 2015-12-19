@@ -30,3 +30,7 @@
 
 # Debug files
 *.dSYM/
+
+#ignore ycm config file and *.swp files
+.ycm*                                                                                                                                                                                         
+*.swp

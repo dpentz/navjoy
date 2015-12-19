@@ -1,0 +1,6 @@
+SET(SOURCES
+	navjoy.c
+)
+
+ADD_EXECUTABLE(navjoy ${SOURCES})
+TARGET_LINK_LIBRARIES(navjoy ${spnav_LIBRARY})

@@ -6,7 +6,8 @@ This creates a joystick device from a Space Navigator using spacenavd. Useful fo
 such as support in Kerbal Space Program.
 
 # Building
-Standard cmake build
+Standard cmake build, requires spacenavd and spacenavd header files. Install as a package
+from your distribution.
 
 # Install
 Make sure you can create uinput devices as a user, use this as a udev rule:
