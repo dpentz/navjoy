@@ -12,7 +12,7 @@ from your distribution.
 # Install
 Make sure you can create uinput devices as a user, use this as a udev rule:
 
-KERNEL=="uinput", MODE="0660", GROUP="<your_username>", OPTIONS+="static_node=uinput"
+KERNEL=="uinput", MODE="0660", GROUP="YOUR_USERNAME_HERE", OPTIONS+="static_node=uinput"
 
 If you have a Steam Controller, you maybe already have this rule.
 
