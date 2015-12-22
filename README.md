@@ -1,6 +1,3 @@
-# navjoy
-Create a joystick from a 3D Space Navigator 6dof device in Linux using spacenavd
-
 # About
 This creates a joystick device from a Space Navigator using spacenavd. Useful for things
 such as support in Kerbal Space Program.
