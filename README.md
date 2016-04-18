@@ -1,6 +1,7 @@
 # About
 This creates a joystick device from a Space Navigator using spacenavd. Useful for things
-such as support in Kerbal Space Program.
+such as support in Kerbal Space Program. This is feature complete as is, so unless
+there is a feature requst, I'm probably not going to update the repo.
 
 # Building
 Standard cmake build, requires spacenavd and spacenavd header files. Install as a package
