@@ -35,6 +35,9 @@ IN THE SOFTWARE.
 #include <linux/uinput.h>
 #include <spnav.h>
 
+#define FIRST_BUTTON_ID BTN_JOYSTICK
+#define NUM_BUTTONS_TOTAL 21
+
 /* levels of logging */
 enum log_level {
 	LOG_ERROR,
@@ -83,6 +86,8 @@ cleanup(int sig);
 int
 main(int argc, char **argv)
 {
+	int btn_id;
+
 	/* handle quit signals */
 	signal(SIGINT, cleanup);
 	signal(SIGHUP, cleanup);
@@ -155,27 +160,18 @@ main(int argc, char **argv)
 				}
 				break;
 			case SPNAV_EVENT_BUTTON:
-				switch(sev.button.bnum){
-					case 0:	
-						memset(&ev, 0, sizeof(struct input_event));
-						ev.type = EV_KEY;
-						ev.code = BTN_A;
-						ev.value = sev.button.press;
-						if(write(fd, &ev, sizeof(struct input_event)) < 0) {
-							plog(LOG_ERROR, "Could not write event");
-						}
-						break;
-					case 1:
-						memset(&ev, 0, sizeof(struct input_event));
-						ev.type = EV_KEY;
-						ev.code = BTN_B;
-						ev.value = sev.button.press;
-						if(write(fd, &ev, sizeof(struct input_event)) < 0) {
-							plog(LOG_ERROR, "Could not write event");
-						}
-						break;
-					default:
-						plog(LOG_ERROR, "Default Event");
+				btn_id = sev.button.bnum;
+				if (btn_id < NUM_BUTTONS_TOTAL) {
+					memset(&ev, 0, sizeof(struct input_event));
+					ev.type = EV_KEY;
+					ev.code = FIRST_BUTTON_ID + btn_id;
+					ev.value = sev.button.press;
+					if(write(fd, &ev, sizeof(struct input_event)) < 0) {
+						plog(LOG_ERROR, "Could not write event");
+					}
+				}
+				else {
+					plog(LOG_ERROR, "Default Event for button %d", btn_id);
 				}
 				memset(&ev, 0, sizeof(struct input_event));
 				ev.type = EV_SYN;
@@ -342,14 +338,12 @@ joy_init()
 		cleanup(EXIT_FAILURE);
 	}
 
-	if(ioctl(fd, UI_SET_KEYBIT, BTN_A) == -1) {
-		plog(LOG_ERROR, "Error with ioctl: %s", strerror(errno));
-		cleanup(EXIT_FAILURE);
-	}
-
-	if(ioctl(fd, UI_SET_KEYBIT, BTN_B) == -1) {
-		plog(LOG_ERROR, "Error with ioctl: %s", strerror(errno));
-		cleanup(EXIT_FAILURE);
+	int i;
+	for ( i = 0; i < NUM_BUTTONS_TOTAL; i++ ) {
+		if(ioctl(fd, UI_SET_KEYBIT, FIRST_BUTTON_ID + i) == -1) {
+			plog(LOG_ERROR, "Error with ioctl: %s", strerror(errno));
+			cleanup(EXIT_FAILURE);
+		}
 	}
 
 	if(ioctl(fd, UI_SET_EVBIT, EV_SYN) == -1) {
